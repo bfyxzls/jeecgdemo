@@ -9,7 +9,7 @@ import com.lind.jeecgdemo.system.util.JeecgDataAutorUtils;
 import com.lind.jeecgdemo.system.util.JwtUtil;
 import com.lind.jeecgdemo.system.vo.SysPermissionDataRuleModel;
 import com.lind.jeecgdemo.util.SqlInjectionUtil;
-import com.lind.jeecgdemo.util.oConvertUtils;
+import com.lind.jeecgdemo.util.ObjectConvertUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.jeecgframework.core.util.ApplicationContextUtil;
@@ -109,7 +109,7 @@ public class QueryGenerator {
 
         //权限规则自定义SQL表达式
         for (String c : ruleMap.keySet()) {
-            if (oConvertUtils.isNotEmpty(c) && c.startsWith(SQL_RULES_COLUMN)) {
+            if (ObjectConvertUtils.isNotEmpty(c) && c.startsWith(SQL_RULES_COLUMN)) {
                 queryWrapper.and(i -> i.apply(getSqlRuleValue(ruleMap.get(c).getRuleValue())));
             }
         }
@@ -147,7 +147,7 @@ public class QueryGenerator {
                 if (null != value && value.toString().startsWith(COMMA) && value.toString().endsWith(COMMA)) {
                     String multiLikeval = value.toString().replace(",,", COMMA);
                     String[] vals = multiLikeval.substring(1, multiLikeval.length()).split(COMMA);
-                    final String field = oConvertUtils.camelToUnderline(name);
+                    final String field = ObjectConvertUtils.camelToUnderline(name);
                     if (vals.length > 1) {
                         queryWrapper.and(j -> {
                             j = j.like(field, vals[0]);
@@ -194,7 +194,7 @@ public class QueryGenerator {
             order = parameterMap.get(ORDER_TYPE)[0];
         }
         log.debug("排序规则>>列:" + column + ",排序方式:" + order);
-        if (oConvertUtils.isNotEmpty(column) && oConvertUtils.isNotEmpty(order)) {
+        if (ObjectConvertUtils.isNotEmpty(column) && ObjectConvertUtils.isNotEmpty(order)) {
             //字典字段，去掉字典翻译文本后缀
             if (column.endsWith(CommonConstant.DICT_TEXT_SUFFIX)) {
                 column = column.substring(0, column.lastIndexOf(CommonConstant.DICT_TEXT_SUFFIX));
@@ -203,9 +203,9 @@ public class QueryGenerator {
             SqlInjectionUtil.filterContent(column);
 
             if (order.toUpperCase().indexOf(ORDER_TYPE_ASC) >= 0) {
-                queryWrapper.orderByAsc(oConvertUtils.camelToUnderline(column));
+                queryWrapper.orderByAsc(ObjectConvertUtils.camelToUnderline(column));
             } else {
-                queryWrapper.orderByDesc(oConvertUtils.camelToUnderline(column));
+                queryWrapper.orderByDesc(ObjectConvertUtils.camelToUnderline(column));
             }
         }
     }
@@ -229,7 +229,7 @@ public class QueryGenerator {
             log.info("---高级查询参数-->" + conditions.toString());
 
             for (QueryCondition rule : conditions) {
-                if (oConvertUtils.isNotEmpty(rule.getField()) && oConvertUtils.isNotEmpty(rule.getRule()) && oConvertUtils.isNotEmpty(rule.getVal())) {
+                if (ObjectConvertUtils.isNotEmpty(rule.getField()) && ObjectConvertUtils.isNotEmpty(rule.getRule()) && ObjectConvertUtils.isNotEmpty(rule.getVal())) {
                     addEasyQuery(queryWrapper, rule.getField(), QueryRuleEnum.getByValue(rule.getRule()), rule.getVal());
                 }
             }
@@ -329,7 +329,7 @@ public class QueryGenerator {
     }
 
     private static void addQueryByRule(QueryWrapper<?> queryWrapper, String name, String type, String value, QueryRuleEnum rule) throws ParseException {
-        if (oConvertUtils.isNotEmpty(value)) {
+        if (ObjectConvertUtils.isNotEmpty(value)) {
             Object temp;
             switch (type) {
                 case "class java.lang.Integer":
@@ -396,10 +396,10 @@ public class QueryGenerator {
      * @param value        查询条件值
      */
     private static void addEasyQuery(QueryWrapper<?> queryWrapper, String name, QueryRuleEnum rule, Object value) {
-        if (value == null || rule == null || oConvertUtils.isEmpty(value)) {
+        if (value == null || rule == null || ObjectConvertUtils.isEmpty(value)) {
             return;
         }
-        name = oConvertUtils.camelToUnderline(name);
+        name = ObjectConvertUtils.camelToUnderline(name);
         log.info("--查询规则-->" + name + " " + rule.getValue() + " " + value);
         switch (rule) {
             case GT:
@@ -495,7 +495,7 @@ public class QueryGenerator {
 
     public static String converRuleValue(String ruleValue) {
         String value = JwtUtil.getSessionData(ruleValue);
-        if (oConvertUtils.isEmpty(value)) {
+        if (ObjectConvertUtils.isEmpty(value)) {
             value = JwtUtil.getUserSystemData(ruleValue, null);
         }
         return value != null ? value : ruleValue;
@@ -518,7 +518,7 @@ public class QueryGenerator {
      * 获取sql中的#{key} 这个key组成的set
      */
     public static Set<String> getSqlRuleParams(String sql) {
-        if (oConvertUtils.isEmpty(sql)) {
+        if (ObjectConvertUtils.isEmpty(sql)) {
             return null;
         }
         Set<String> varParams = new HashSet<String>();
@@ -546,7 +546,7 @@ public class QueryGenerator {
         if (value == null) {
             return "";
         }
-        field = alias + oConvertUtils.camelToUnderline(field);
+        field = alias + ObjectConvertUtils.camelToUnderline(field);
         QueryRuleEnum rule = QueryGenerator.convert2Rule(value);
         return getSingleSqlByRule(rule, field, value, isString);
     }
@@ -684,7 +684,7 @@ public class QueryGenerator {
         PropertyDescriptor origDescriptors[] = PropertyUtils.getPropertyDescriptors(clazz);
         String sql_and = " and ";
         for (String c : ruleMap.keySet()) {
-            if (oConvertUtils.isNotEmpty(c) && c.startsWith(SQL_RULES_COLUMN)) {
+            if (ObjectConvertUtils.isNotEmpty(c) && c.startsWith(SQL_RULES_COLUMN)) {
                 sb.append(sql_and + getSqlRuleValue(ruleMap.get(c).getRuleValue()));
             }
         }
@@ -705,7 +705,7 @@ public class QueryGenerator {
                 } else {
                     value = NumberUtils.parseNumber(dataRule.getRuleValue(), propType);
                 }
-                String filedSql = getSingleSqlByRule(rule, oConvertUtils.camelToUnderline(name), value, isString);
+                String filedSql = getSingleSqlByRule(rule, ObjectConvertUtils.camelToUnderline(name), value, isString);
                 sb.append(sql_and + filedSql);
             }
         }
@@ -725,7 +725,7 @@ public class QueryGenerator {
         Map<String, SysPermissionDataRuleModel> ruleMap = getRuleMap();
         PropertyDescriptor origDescriptors[] = PropertyUtils.getPropertyDescriptors(clazz);
         for (String c : ruleMap.keySet()) {
-            if (oConvertUtils.isNotEmpty(c) && c.startsWith(SQL_RULES_COLUMN)) {
+            if (ObjectConvertUtils.isNotEmpty(c) && c.startsWith(SQL_RULES_COLUMN)) {
                 queryWrapper.and(i -> i.apply(getSqlRuleValue(ruleMap.get(c).getRuleValue())));
             }
         }
@@ -745,7 +745,7 @@ public class QueryGenerator {
      * 获取系统数据库类型
      */
     private static String getDbType() {
-        if (oConvertUtils.isNotEmpty(DB_TYPE)) {
+        if (ObjectConvertUtils.isNotEmpty(DB_TYPE)) {
             return DB_TYPE;
         }
         try {

@@ -1,6 +1,6 @@
 package com.lind.jeecgdemo.util.superSearch;
 
-import com.lind.jeecgdemo.util.oConvertUtils;
+import com.lind.jeecgdemo.util.ObjectConvertUtils;
 
 /**
  * Query 规则 常量
@@ -32,7 +32,7 @@ public enum QueryRuleEnum {
     }
 
     public static QueryRuleEnum getByValue(String value) {
-        if (oConvertUtils.isEmpty(value)) {
+        if (ObjectConvertUtils.isEmpty(value)) {
             return null;
         }
         for (QueryRuleEnum val : values()) {

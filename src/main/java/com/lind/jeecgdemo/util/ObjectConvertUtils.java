@@ -23,7 +23,7 @@ import java.util.regex.Pattern;
  *
  */
 @Slf4j
-public class oConvertUtils {
+public class ObjectConvertUtils {
 	public static boolean isEmpty(Object object) {
 		if (object == null) {
 			return (true);

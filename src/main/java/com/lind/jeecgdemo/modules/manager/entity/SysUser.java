@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.annotation.TableLogic;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.lind.jeecgdemo.annotation.Dict;
-import com.lind.jeecgdemo.system.base.entity.JeecgEntity;
+import com.lind.jeecgdemo.system.base.entity.EntityBase;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
@@ -25,7 +25,7 @@ import java.util.Date;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-public class SysUser extends JeecgEntity implements Serializable {
+public class SysUser extends EntityBase implements Serializable {
 
     private static final long serialVersionUID = 1L;
 

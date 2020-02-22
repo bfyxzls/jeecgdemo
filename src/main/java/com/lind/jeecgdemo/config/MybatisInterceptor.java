@@ -1,7 +1,7 @@
 package com.lind.jeecgdemo.config;
 
 import com.lind.jeecgdemo.system.vo.LoginUser;
-import com.lind.jeecgdemo.util.oConvertUtils;
+import com.lind.jeecgdemo.util.ObjectConvertUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.binding.MapperMethod.ParamMap;
 import org.apache.ibatis.executor.Executor;
@@ -40,7 +40,7 @@ public class MybatisInterceptor implements Interceptor {
         }
         if (SqlCommandType.INSERT == sqlCommandType) {
             LoginUser sysUser = this.getLoginUser();
-            Field[] fields = oConvertUtils.getAllFields(parameter);
+            Field[] fields = ObjectConvertUtils.getAllFields(parameter);
             for (Field field : fields) {
                 log.debug("------field.name------" + field.getName());
                 try {
@@ -105,9 +105,9 @@ public class MybatisInterceptor implements Interceptor {
                 }
                 //update-end-author:scott date:20190729 for:更新指定字段时报错 issues/#516-
 
-                fields = oConvertUtils.getAllFields(parameter);
+                fields = ObjectConvertUtils.getAllFields(parameter);
             } else {
-                fields = oConvertUtils.getAllFields(parameter);
+                fields = ObjectConvertUtils.getAllFields(parameter);
             }
 
             for (Field field : fields) {

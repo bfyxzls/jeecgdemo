@@ -14,14 +14,14 @@ import java.io.Serializable;
 
 /**
  * @Description: Entity基类
- * @Author: dangzhenghui@163.com
- * @Date: 2019-4-28
+ * @Author: lind
+ * @Date: 2020-02-22
  * @Version: 1.1
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-public class JeecgEntity implements Serializable {
+public class EntityBase implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	/** ID */

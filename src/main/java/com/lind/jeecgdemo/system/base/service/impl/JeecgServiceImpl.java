@@ -2,7 +2,7 @@ package com.lind.jeecgdemo.system.base.service.impl;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.lind.jeecgdemo.system.base.entity.JeecgEntity;
+import com.lind.jeecgdemo.system.base.entity.EntityBase;
 import com.lind.jeecgdemo.system.base.service.JeecgService;
 import lombok.extern.slf4j.Slf4j;
 
@@ -13,6 +13,6 @@ import lombok.extern.slf4j.Slf4j;
  * @Version: 1.0
  */
 @Slf4j
-public class JeecgServiceImpl<M extends BaseMapper<T>, T extends JeecgEntity> extends ServiceImpl<M, T> implements JeecgService<T> {
+public class JeecgServiceImpl<M extends BaseMapper<T>, T extends EntityBase> extends ServiceImpl<M, T> implements JeecgService<T> {
 
 }

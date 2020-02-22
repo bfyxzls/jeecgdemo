@@ -5,7 +5,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.lind.jeecgdemo.system.query.QueryGenerator;
 import com.lind.jeecgdemo.system.vo.LoginUser;
 import com.lind.jeecgdemo.system.vo.Result;
-import com.lind.jeecgdemo.util.oConvertUtils;
+import com.lind.jeecgdemo.util.ObjectConvertUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.shiro.SecurityUtils;
@@ -56,7 +56,7 @@ public class JeecgController<T, S extends IService<T>> {
 
         // 过滤选中数据
         String selections = request.getParameter("selections");
-        if (oConvertUtils.isNotEmpty(selections)) {
+        if (ObjectConvertUtils.isNotEmpty(selections)) {
             List<String> selectionList = Arrays.asList(selections.split(","));
             exportList = pageList.stream().filter(item -> selectionList.contains(getId(item))).collect(Collectors.toList());
         } else {
@@ -64,6 +64,11 @@ public class JeecgController<T, S extends IService<T>> {
         }
 
         // Step.3 AutoPoi 导出Excel
+        ModelAndView mv = getModelAndView(clazz, title, exportList);
+        return mv;
+    }
+
+    private ModelAndView getModelAndView(Class<T> clazz, String title, List<T> exportList) {
         ModelAndView mv = new ModelAndView(new JeecgEntityExcelView());
         mv.addObject(NormalExcelConstants.FILE_NAME, title); //此处设置的filename无效 ,前端会重更新设置一下
         mv.addObject(NormalExcelConstants.CLASS, clazz);
@@ -73,13 +78,8 @@ public class JeecgController<T, S extends IService<T>> {
     }
 
     protected ModelAndView exportXls(HttpServletRequest request, List<T> list, String title) {
-        // AutoPoi 导出Excel
-        ModelAndView mv = new ModelAndView(new JeecgEntityExcelView());
-        mv.addObject(NormalExcelConstants.FILE_NAME, title); //此处设置的filename无效 ,前端会重更新设置一下
         Class<T> tClass = (Class<T>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0];
-        mv.addObject(NormalExcelConstants.CLASS, tClass);
-        mv.addObject(NormalExcelConstants.PARAMS, new ExportParams(title + "报表", "导出人", title));
-        mv.addObject(NormalExcelConstants.DATA_LIST, list);
+        ModelAndView mv = getModelAndView(tClass, title, list);
         return mv;
     }
 
