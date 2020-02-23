@@ -4,6 +4,8 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.lind.jeecgdemo.modules.manager.entity.SysUser;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.List;
+
 public interface SysUserMapper extends BaseMapper<SysUser> {
     /**
      * 通过用户账号查询用户信息
@@ -29,4 +31,10 @@ public interface SysUserMapper extends BaseMapper<SysUser> {
      */
     SysUser getUserByEmail(@Param("email") String email);
 
+    /**
+     * 获取所有数据.
+     *
+     * @return
+     */
+    List<SysUser> getAll();
 }

@@ -26,6 +26,27 @@ import java.util.Properties;
 @Intercepts({@Signature(type = Executor.class, method = "update", args = {MappedStatement.class, Object.class})})
 public class MybatisInterceptor implements Interceptor {
 
+    /**
+     * 建立者.
+     */
+    public static final String CREATE_BY = "createBy";
+    /**
+     * 建立时间.
+     */
+    public static final String CREATE_TIME = "createTime";
+    /**
+     * 部门编码.
+     */
+    public static final String SYS_ORG_CODE = "sysOrgCode";
+    /**
+     * 更新者.
+     */
+    public static final String UPDATE_BY = "updateBy";
+    /**
+     * 更新时间.
+     */
+    public static final String UPDATE_TIME = "updateTime";
+
     @Override
     public Object intercept(Invocation invocation) throws Throwable {
         MappedStatement mappedStatement = (MappedStatement) invocation.getArgs()[0];
@@ -44,7 +65,7 @@ public class MybatisInterceptor implements Interceptor {
             for (Field field : fields) {
                 log.debug("------field.name------" + field.getName());
                 try {
-                    if ("createBy".equals(field.getName())) {
+                    if (CREATE_BY.equals(field.getName())) {
                         field.setAccessible(true);
                         Object local_createBy = field.get(parameter);
                         field.setAccessible(false);
@@ -58,7 +79,7 @@ public class MybatisInterceptor implements Interceptor {
                         }
                     }
                     // 注入创建时间
-                    if ("createTime".equals(field.getName())) {
+                    if (CREATE_TIME.equals(field.getName())) {
                         field.setAccessible(true);
                         Object local_createDate = field.get(parameter);
                         field.setAccessible(false);
@@ -69,7 +90,7 @@ public class MybatisInterceptor implements Interceptor {
                         }
                     }
                     //注入部门编码
-                    if ("sysOrgCode".equals(field.getName())) {
+                    if (SYS_ORG_CODE.equals(field.getName())) {
                         field.setAccessible(true);
                         Object local_sysOrgCode = field.get(parameter);
                         field.setAccessible(false);
@@ -113,7 +134,7 @@ public class MybatisInterceptor implements Interceptor {
             for (Field field : fields) {
                 log.debug("------field.name------" + field.getName());
                 try {
-                    if ("updateBy".equals(field.getName())) {
+                    if (UPDATE_BY.equals(field.getName())) {
                         //获取登录用户信息
                         if (sysUser != null) {
                             // 登录账号
@@ -122,7 +143,7 @@ public class MybatisInterceptor implements Interceptor {
                             field.setAccessible(false);
                         }
                     }
-                    if ("updateTime".equals(field.getName())) {
+                    if (UPDATE_TIME.equals(field.getName())) {
                         field.setAccessible(true);
                         field.set(parameter, new Date());
                         field.setAccessible(false);
@@ -145,17 +166,19 @@ public class MybatisInterceptor implements Interceptor {
         // TODO Auto-generated method stub
     }
 
-    //update-begin--Author:scott  Date:20191213 for：关于使用Quzrtz 开启线程任务， #465
+    /**
+     * 获取当前登录用户.
+     *
+     * @return
+     */
     private LoginUser getLoginUser() {
         LoginUser sysUser = null;
         try {
-            sysUser = SecurityUtils.getSubject().getPrincipal() != null ? (LoginUser) SecurityUtils.getSubject().getPrincipal() : null;
+            sysUser = SecurityUtils.getSubject().getPrincipal() != null ? (LoginUser) SecurityUtils.getSubject().getPrincipal() : new LoginUser();
         } catch (Exception e) {
             //e.printStackTrace();
             sysUser = null;
         }
         return sysUser;
     }
-    //update-end--Author:scott  Date:20191213 for：关于使用Quzrtz 开启线程任务， #465
-
 }

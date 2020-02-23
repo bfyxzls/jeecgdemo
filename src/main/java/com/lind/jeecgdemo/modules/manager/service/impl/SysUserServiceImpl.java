@@ -7,6 +7,8 @@ import com.lind.jeecgdemo.modules.manager.service.SysUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> implements SysUserService {
     @Autowired
@@ -30,5 +32,15 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     @Override
     public boolean deleteUser(String userId) {
         return userMapper.deleteById(userId) > 0;
+    }
+
+    @Override
+    public List<SysUser> getUsers() {
+        return userMapper.getAll();
+    }
+
+    @Override
+    public void addUser(SysUser sysUser) {
+        userMapper.insert(sysUser);
     }
 }

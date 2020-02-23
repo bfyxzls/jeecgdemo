@@ -80,4 +80,9 @@
 			#{id}
 		</foreach>
 	</update>
+
+	<select id="getAll" resultType="com.lind.jeecgdemo.modules.manager.entity.SysUser">
+	select * from  sys_user
+	</select>
+
 </mapper>

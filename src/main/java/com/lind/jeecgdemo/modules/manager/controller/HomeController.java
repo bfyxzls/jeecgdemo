@@ -12,8 +12,8 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 
-@RestController("ProductController")
-@RequestMapping("/product")
+@RestController("UserController")
+@RequestMapping("/user")
 public class HomeController extends JeecgController<SysUser, SysUserService> {
     @Autowired
     SysUserService sysUserService;
@@ -23,9 +23,18 @@ public class HomeController extends JeecgController<SysUser, SysUserService> {
         return Result.ok("manager.index加载成功");
     }
 
-    @GetMapping("user")
+    @GetMapping("add")
+    public Result<?> add() {
+        SysUser user = new SysUser();
+        user.setUsername("test");
+        user.setRealname("测试");
+        sysUserService.addUser(user);
+        return Result.ok("manager.add加载成功");
+    }
+
+    @GetMapping("get-all")
     public Result<?> user() {
-        return Result.ok(sysUserService.getUserByName("admin"));
+        return Result.ok(sysUserService.getUsers());
     }
 
     @GetMapping("excel")
